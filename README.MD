@@ -65,12 +65,14 @@ for both client and the server.
 #### Configuration
 The following parameters are freely configurable by the user in /client/config/parameters.go:
 
+```
 Sleeptime (int) - the time slept between beacons in seconds
 Jitter (int) - random extra delay to be added to the sleeptime
 Retries (int) - amount of tries to take in case C2 is unreachable
 UserAgent (string) - the user agent that gets sent on beacons
 CCHost (string) - the base server url
 Endpoints (string[]) - the endpoints in the server to which beacon. They are chosen randomly
+```
 
 
 ## Usage
