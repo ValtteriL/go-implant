@@ -76,7 +76,8 @@ Endpoints (string[]) - the endpoints in the server to which beacon. They are cho
 
 You should get a SSL certificate and corresponding private key from Lets encrypt for best results. The agent will not trust self-signed certificates unless the root certificate has been installed first.
 
-`Usage of ./server:
+```
+Usage of ./server:
   -cert string
     	file with https cert (default "server.crt")
   -forwarded-timeout duration
@@ -91,7 +92,7 @@ You should get a SSL certificate and corresponding private key from Lets encrypt
     	file with private key for cert (default "server.key")
   -sshport int
     	port of SSH listener (default 22)
-`
+```
 
 #### examples
 `./server -handlerport 8080 -sshport 2222`
